@@ -1,0 +1,79 @@
+const estoque = [];
+const pedido = [];
+
+const item = {
+    idItem: 0,
+    nome: "",
+    descricao: "",
+    cor: "",
+    qtdItem: 0,
+    categoria: "",
+    preco: 0,
+
+}
+
+
+function verificaEstoque(codItem, qtdConsulta) {
+
+    aux = estoque[codItem - 1].qtdItem
+
+    if (aux >= qtdConsulta && aux > 0) {
+        //console.log("Em estoque");
+        return true;
+    } else {
+        //console.log("Fora de estoque");
+        return false;
+    }
+
+}
+
+
+function adicionaItemEstoque(nomeItem, descItem, corItem, qtdEstoque, catItem, precoItem) {
+
+    estoque.push({ idItem: (estoque.length + 1), nome: nomeItem, descricao: descItem, cor: corItem, qtdItem: qtdEstoque, categoria: catItem, preco: precoItem });
+
+}
+
+
+function apresentarEstoque() {
+
+    for (var i in estoque) {
+        if (verificaEstoque(estoque[i].idItem, 0)) {
+            console.log("Cód.: " + estoque[i].idItem + " Nome: " + estoque[i].nome + " Quantidade: " + estoque[i].qtdItem);
+        }
+    }
+
+}
+
+function listarCompras() {
+
+    let total = 0;
+    let quantidade = 0;
+
+    for (var i in pedido) {
+        console.log(pedido[i].nome + " \n Qtd: " + pedido[i].qtdItem + " \n Preço = R$ " + (pedido[i].preco * pedido[i].qtdItem));
+        total = total + pedido[i].preco * pedido[i].qtdItem;
+        quantidade = quantidade + pedido[i].qtdItem;
+    }
+
+    console.log("Subtotal ("+quantidade+" itens) R$ " + total);
+
+}
+
+function carrinhoCompras(codItem, quantidade) {
+
+    itemAux = estoque[codItem - 1];
+    if (verificaEstoque(itemAux.idItem, quantidade)) {
+        pedido.push({ idItem: codItem, nome: itemAux.nome, descricao: itemAux.descricao, cor: itemAux.cor, qtdItem: quantidade, categoria: itemAux.categoria, preco: itemAux.preco });
+        console.log("Você selecionou: " + pedido[pedido.length - 1].qtdItem + "X " + pedido[pedido.length - 1].nome);
+        estoque[codItem - 1].qtdItem = estoque[codItem - 1].qtdItem - quantidade;
+    } else {
+        console.log("Item fora de estoque!");
+    }
+
+}
+
+adicionaItemEstoque("Fire TV Stick", "Com controle remoto", "Preto", 1, "Eletrônico", 360.05);
+adicionaItemEstoque("Kindle", "10a Geração", "Preto", 2, "Eletrônico", 379.05);
+adicionaItemEstoque("Capa Nupro para Kindle", "10a Geração", "Azul", 15, "Acessórios", 69.00);
+adicionaItemEstoque("Echo Dot", "3a Geração", "Preto", 100, "Eletrônico", 331.55);
